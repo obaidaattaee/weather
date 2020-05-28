@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<link rel="stylesheet" href="test7.css">
+	<title>test 7</title>
+</head>
+<body>
+		<header>
+			<div id="topBar" class="topBar">
+				
+					<div class="logoImage"><a href="#" class="logoLinlk"><img src="weather/logo.png" alt="" class="logoImg"></a>
+				<h1 id="logoHeader"      class="logoHeader">sniper world</h1></div>
+				<ul class="list1">
+					<li class="listitem" ><a href="test7.html" 
+						class="listLink" id="link1">home</a></li>
+					<li class="listitem"><a href="services.html"
+						class="listLink" >services</a></li>
+					<li class="listitem"><a href="aboute.html" 
+						class="listLink">aboute</a></li>
+					<li class="listitem"><a href="contact.html" 
+						class="listLink">contact</a></li>
+				</ul>
+				<div class="dropdown">
+				<button class="headerButton" >
+					<hr class="buttonHr">
+					<hr class="headerHr">
+					<hr class="headerHr">
+				</button>
+				
+				<div class="list2" id="list2">
+					<a href="test7.html" 
+						id="listitem2" class="listitem2">home</a>
+					<a href="services.html"
+						id="listitem2" class="listitem2">services</a>
+					<a href="aboute.html"
+						id="listitem2" class="listitem2">aboute</a>
+					<a href="contact.html"
+						id="listitem2" class="listitem2">contact</a>
+					</div>
+			</div>
+			
+			</div>
+			<div class="headerContener">
+				<h1 class="headerH1">weather in my city</h1>
+				<p>you can get weather information about your location or another </p>
+				<form action="" class="formarea">
+					<input type="text" class="inputText" placeholder="enter city name"> 
+					<button type="submit" class="searchButton">search</button>
+				</form>
+			
+			<center>
+			<div class="mainContener">
+				<div class="firstDay">
+					<div class="headerDay" id="headerDay1"></div>
+					<div class="dayInformation">
+						<div class="cityName" id="cityName"></div>
+						<div class="mainInformation"><p id="mainInformation"></p><canvas id="icon1" class="canvas"></div>
+						<div class="moreInformation"><img src="umbrella-512.png" id="moreinformation1" class="iconn"><p id="moreinformationP1"></p><img src="wind-speed-icon-19.jpg.png" id="moreinformation2" class="iconn"><p id="moreinformationP2"></p><img src="position.png" id="moreinformation3" class="iconn"><p id="moreinformationP3"></p></div>
+					</div>
+				</div>
+				<div class="secondDay">
+					<div class="headerDay" id="headerDay2"></div>
+					<div><canvas id="icon2" class="canvas"></div>
+					<div><p id="seconddayMaxTep"></p><p id="seconddayMinTep"></p></div>
+				</div>
+				<div class="therdDay">
+					<div class="headerDay" id="headerDay3"></div>
+					<div><canvas id="icon3" class="canvas"></div>
+						<div><p id="therddayMaxTep"></p><p id="therddayMinTep"></p></div>
+				</div>
+				<div class="fourthDay">
+					<div class="headerDay" id="headerDay4"></div>
+					<div><canvas id="icon4" class="canvas"></div>
+						<div><p id="fourthdayMaxTep"></p><p id="fourthdayMinTep"></p></div>
+				</div>
+				<div class="fivthDay">
+					<div class="headerDay" id="headerDay5"></div>
+					<div><canvas id="icon5" class="canvas"></div>
+						<div><p id="sivthdayMaxTep"></p><p id="sivthdayMinTep"></p></div>
+				</div>
+				<div class="sixthDay">
+					<div class="headerDay" id="headerDay6"></div>
+					<div><canvas id="icon6" class="canvas"></div>
+						<div><p id="sixthdayMaxTep"></p><p id="sixthdayMinTep"></p></div>
+				</div>
+				<div class="seventhDay">
+					<div class="headerDay" id="headerDay7"></div>
+					<div><canvas id="icon7" class="canvas"></div>
+						<div><p id="seventhdayMaxTep"></p><p id="seventhdayMinTep"></p></div>
+				</div>
+			</div>
+		</center>
+		</div>
+			
+		</header>
+
+		<script src="skycons-master/skycons.js"></script>
+		<script>
+			var lat , long ;
+			var q ;
+			var dn = new Date ;
+
+
+			function setIcon(icon , iconId){
+			var skycons = new Skycons({color : "skyblue"});
+			var current_icon = icon.replace(/-/g , '_').toUpperCase();
+			skycons.play();
+			return skycons.set(iconId , Skycons[current_icon]);
+			}
+			function getDayName(i){
+				var day = new Date();
+				dayname = new Array(7);
+				
+				dayname[0] = "Sunday";
+				dayname[1] = "Monday";
+				dayname[2] = "Tuesday";
+				dayname[3] = "Wednesday";
+				dayname[4] = "Thursday";
+				dayname[5] = "Friday";
+				dayname[6] = "Saturday";
+				return dayname[i];
+			}
+
+			window.addEventListener('load' , getWeather =>{
+				navigator.geolocation.getCurrentPosition(position =>{
+					console.log(position);
+					 long = position.coords.longitude;
+					 lat = position.coords.latitude ;
+					console.log(long + '======' + lat);
+					fetch('http://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/3d30e33f9d045fcad114d6837e06ac8b/'+lat+','+long)
+            .then( response => {
+                return response.json();
+            }).then(data => {
+				console.log(data);
+				console.log('this is timezone '+data.timezone);
+				document.getElementById('cityName').textContent = data.timezone ;
+				console.log(data.daily.data[0].temperatureHigh);
+				document.getElementById('mainInformation').textContent = data.daily.data[0].temperatureHigh +'F' ;
+
+				document.getElementById('headerDay1').textContent = getDayName(dn.getDay());
+
+				document.getElementById('headerDay2').textContent = getDayName(dn.getDay()+1);
+
+				document.getElementById('headerDay3').textContent = getDayName(dn.getDay()+2);
+
+				document.getElementById('headerDay4').textContent = getDayName(dn.getDay()+3);
+
+				document.getElementById('headerDay5').textContent = getDayName(dn.getDay()+4);
+
+				document.getElementById('headerDay6').textContent = getDayName(dn.getDay()+5);
+
+
+				document.getElementById('headerDay7').textContent = getDayName(dn.getDay()+6);
+
+				console.log(data.daily.data[0].icon);
+				setIcon(data.daily.data[0].icon , document.getElementById('icon1'));
+				document.getElementById('moreinformationP1').textContent = data.daily.data[0].dewPoint + '%' ;
+				document.getElementById('moreinformationP2').textContent = data.daily.data[0].windSpeed + 'km/h' ;
+				document.getElementById('moreinformationP3').textContent = data.daily.data[0].dewPoint + '%' ;
+				setIcon(data.daily.data[1].icon , document.getElementById('icon2'));
+				document.getElementById('seconddayMaxTep').textContent = data.daily.data[1].temperatureMax;
+				document.getElementById('seconddayMinTep').textContent = data.daily.data[1].temperatureMin;
+				setIcon(data.daily.data[2].icon , document.getElementById('icon3'));
+				document.getElementById('therddayMaxTep').textContent = data.daily.data[2].temperatureMax;
+				document.getElementById('therddayMinTep').textContent = data.daily.data[2].temperatureMin;
+				setIcon(data.daily.data[3].icon , document.getElementById('icon4'));
+				document.getElementById('fourthdayMaxTep').textContent = data.daily.data[3].temperatureMax;
+				document.getElementById('fourthdayMinTep').textContent = data.daily.data[3].temperatureMin;
+				setIcon(data.daily.data[4].icon , document.getElementById('icon5'));
+				document.getElementById('sivthdayMaxTep').textContent = data.daily.data[4].temperatureMax;
+				document.getElementById('sivthdayMinTep').textContent = data.daily.data[4].temperatureMin;
+				setIcon(data.daily.data[5].icon , document.getElementById('icon6'));
+				document.getElementById('sixthdayMaxTep').textContent = data.daily.data[5].temperatureMax;
+				document.getElementById('sixthdayMinTep').textContent = data.daily.data[5].temperatureMin;
+				setIcon(data.daily.data[6].icon , document.getElementById('icon7'));
+				document.getElementById('seventhdayMaxTep').textContent = data.daily.data[6].temperatureMax;
+				document.getElementById('seventhdayMinTep').textContent = data.daily.data[6].temperatureMin;	
+			});
+				});
+			});	
+		</script>
+</body>
+</html>
